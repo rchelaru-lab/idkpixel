@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Pixel Art</title>
+
 <style>
   body {
     background: #111;
@@ -10,6 +11,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin: 0;
   }
 
   .canvas {
@@ -23,50 +25,48 @@
     width: 20px;
     height: 20px;
     background: #222;
+    cursor: pointer;
   }
-
-  .on { background: #00ff88; }
 </style>
 </head>
+
 <body>
 
-<div class="canvas">
-  <div class="pixel"></div>
-  <div class="pixel on"></div>
-  <div class="pixel on"></div>
-  <div class="pixel"></div>
-  <div class="pixel"></div>
-  <div class="pixel on"></div>
-  <div class="pixel on"></div>
-  <div class="pixel"></div>
+<div class="canvas" id="canvas"></div>
 
-  <div class="pixel on"></div>
-  <div class="pixel"></div>
-  <div class="pixel"></div>
-  <div class="pixel on"></div>
-  <div class="pixel on"></div>
-  <div class="pixel"></div>
-  <div class="pixel"></div>
-  <div class="pixel on"></div>
+<script>
+  const canvas = document.getElementById("canvas");
+  let currentColor = "#00ff88"; // default color (1)
 
-  <div class="pixel on"></div>
-  <div class="pixel"></div>
-  <div class="pixel"></div>
-  <div class="pixel on"></div>
-  <div class="pixel on"></div>
-  <div class="pixel"></div>
-  <div class="pixel"></div>
-  <div class="pixel on"></div>
+  // Color palette
+  const colors = {
+    1: "#00ff88", // green
+    2: "#ff4444", // red
+    3: "#4488ff", // blue
+    4: "#ffee44", // yellow
+    5: "#bb66ff"  // purple
+  };
 
-  <div class="pixel"></div>
-  <div class="pixel on"></div>
-  <div class="pixel on"></div>
-  <div class="pixel"></div>
-  <div class="pixel"></div>
-  <div class="pixel on"></div>
-  <div class="pixel on"></div>
-  <div class="pixel"></div>
-</div>
+  // Create 64 pixels (8x8)
+  for (let i = 0; i < 64; i++) {
+    const pixel = document.createElement("div");
+    pixel.className = "pixel";
+
+    pixel.addEventListener("click", () => {
+      pixel.style.background = currentColor;
+    });
+
+    canvas.appendChild(pixel);
+  }
+
+  // Keyboard color switch
+  document.addEventListener("keydown", (e) => {
+    if (colors[e.key]) {
+      currentColor = colors[e.key];
+      console.log("Color changed to", e.key);
+    }
+  });
+</script>
 
 </body>
 </html>
