@@ -1,72 +1,66 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Pixel Art</title>
-
-<style>
-  body {
-    background: #111;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-
-  .canvas {
-    display: grid;
-    grid-template-columns: repeat(8, 20px);
-    grid-template-rows: repeat(8, 20px);
-    gap: 2px;
-  }
-
-  .pixel {
-    width: 20px;
-    height: 20px;
-    background: #222;
-    cursor: pointer;
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>My Arcade Hub</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #181818;
+      color: #fff;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 { margin-bottom: 20px; }
+    .games {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .game {
+      width: 180px;
+      text-decoration: none;
+      color: white;
+    }
+    .game img {
+      width: 180px;
+      border-radius: 8px;
+      border: 2px solid #444;
+    }
+    .game-title {
+      margin-top: 8px;
+      font-size: 14px;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="canvas" id="canvas"></div>
+  <h1>🎮 My Arcade Games</h1>
+  <div class="games">
 
-<script>
-  const canvas = document.getElementById("canvas");
-  let currentColor = "#00ff88"; // default color (1)
+    <a class="game" href="https://www.crazygames.com/nl/game/krunker-io" target="_blank">
+      <img src="https://images.crazygames.com/krunker-io/20210524082920/thumbnail.webp" alt="Krunker.io">
+      <div class="game-title">Krunker.io</div>
+    </a>
 
-  // Color palette
-  const colors = {
-    1: "#00ff88", // green
-    2: "#ff4444", // red
-    3: "#4488ff", // blue
-    4: "#ffee44", // yellow
-    5: "#bb66ff"  // purple
-  };
+    <a class="game" href="https://www.crazygames.com/nl/game/moto-x3m" target="_blank">
+      <img src="https://images.crazygames.com/moto-x3m/20200414071331/thumbnail.webp" alt="Moto X3M">
+      <div class="game-title">Moto X3M</div>
+    </a>
 
-  // Create 64 pixels (8x8)
-  for (let i = 0; i < 64; i++) {
-    const pixel = document.createElement("div");
-    pixel.className = "pixel";
+    <a class="game" href="https://www.crazygames.com/nl/game/1v1lol" target="_blank">
+      <img src="https://images.crazygames.com/1v1lol/20210319003954/thumbnail.webp" alt="1v1.lol">
+      <div class="game-title">1v1.lol</div>
+    </a>
 
-    pixel.addEventListener("click", () => {
-      pixel.style.background = currentColor;
-    });
+    <a class="game" href="https://www.crazygames.com/nl/game/stickman-hook" target="_blank">
+      <img src="https://images.crazygames.com/stickman-hook/20211116174518/thumbnail.webp" alt="Stickman Hook">
+      <div class="game-title">Stickman Hook</div>
+    </a>
 
-    canvas.appendChild(pixel);
-  }
+  </div>
 
-  // Keyboard color switch
-  document.addEventListener("keydown", (e) => {
-    if (colors[e.key]) {
-      currentColor = colors[e.key];
-      console.log("Color changed to", e.key);
-    }
-  });
-</script>
-
+  <p style="margin-top: 40px; font-size: 14px;">Click a game thumbnail to play!</p>
 </body>
 </html>
