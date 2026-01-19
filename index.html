@@ -9,6 +9,7 @@
     color: white;
     font-family: Arial, sans-serif;
     text-align: center;
+    overflow: hidden;
   }
   button {
     padding: 10px 20px;
@@ -20,37 +21,58 @@
     background: black;
     margin-top: 20px;
     border: 2px solid white;
+    outline: none;
   }
   .game {
     display: none;
   }
 </style>
 </head>
-<body>
+<body tabindex="0">
 
 <h1>🎮 Mini Arcade</h1>
 <p>Choose a game</p>
 
-<button onclick="showGame('snake')">Snake</button>
+<button onclick="startSnake()">Snake</button>
 <button onclick="showGame('game2048')">2048</button>
 
-<!-- SNAKE -->
 <div id="snake" class="game">
-  <h2>Snake</h2>
+  <h2>Snake (click the game, then use arrow keys)</h2>
   <canvas id="snakeCanvas" width="400" height="400"></canvas>
 </div>
 
-<!-- 2048 -->
 <div id="game2048" class="game">
   <h2>2048</h2>
   <div id="grid" style="width:260px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:5px;"></div>
 </div>
 
 <script>
+let currentGame = null;
+
 function showGame(id) {
   document.querySelectorAll('.game').forEach(g => g.style.display = 'none');
   document.getElementById(id).style.display = 'block';
+  document.body.focus();
+  currentGame = id;
 }
+
+function startSnake() {
+  showGame('snake');
+  document.getElementById('snakeCanvas').focus();
+}
+
+/* ---------- KEY HANDLING ---------- */
+document.addEventListener("keydown", e => {
+  if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) {
+    e.preventDefault();
+  }
+  if (currentGame !== 'snake') return;
+
+  if (e.key === "ArrowUp" && dy === 0) {dx=0;dy=-20;}
+  if (e.key === "ArrowDown" && dy === 0) {dx=0;dy=20;}
+  if (e.key === "ArrowLeft" && dx === 0) {dx=-20;dy=0;}
+  if (e.key === "ArrowRight" && dx === 0) {dx=20;dy=0;}
+});
 
 /* ---------- SNAKE ---------- */
 const canvas = document.getElementById("snakeCanvas");
@@ -58,13 +80,6 @@ const ctx = canvas.getContext("2d");
 let snake = [{x:200,y:200}];
 let food = {x:100,y:100};
 let dx = 20, dy = 0;
-
-document.addEventListener("keydown", e => {
-  if (e.key === "ArrowUp") {dx=0;dy=-20;}
-  if (e.key === "ArrowDown") {dx=0;dy=20;}
-  if (e.key === "ArrowLeft") {dx=-20;dy=0;}
-  if (e.key === "ArrowRight") {dx=20;dy=0;}
-});
 
 function drawSnake() {
   ctx.clearRect(0,0,400,400);
@@ -75,15 +90,19 @@ function drawSnake() {
 }
 
 function moveSnake() {
+  if (!currentGame) return;
   const head = {x:snake[0].x+dx,y:snake[0].y+dy};
   snake.unshift(head);
+
   if (head.x===food.x && head.y===food.y) {
     food.x=Math.floor(Math.random()*20)*20;
     food.y=Math.floor(Math.random()*20)*20;
   } else snake.pop();
+
+  drawSnake();
 }
 
-setInterval(()=>{moveSnake();drawSnake();},150);
+setInterval(moveSnake,150);
 
 /* ---------- 2048 ---------- */
 let grid = Array(16).fill(0);
