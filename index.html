@@ -1,66 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Arcade Hub</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #181818;
-      color: #fff;
-      text-align: center;
-      padding: 30px;
-    }
-    h1 { margin-bottom: 20px; }
-    .games {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
-    .game {
-      width: 180px;
-      text-decoration: none;
-      color: white;
-    }
-    .game img {
-      width: 180px;
-      border-radius: 8px;
-      border: 2px solid #444;
-    }
-    .game-title {
-      margin-top: 8px;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Mini Arcade</title>
+<style>
+  body {
+    background: #121212;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  canvas {
+    background: black;
+    margin-top: 20px;
+    border: 2px solid white;
+  }
+  .game {
+    display: none;
+  }
+</style>
 </head>
 <body>
 
-  <h1>🎮 My Arcade Games</h1>
-  <div class="games">
+<h1>🎮 Mini Arcade</h1>
+<p>Choose a game</p>
 
-    <a class="game" href="https://www.crazygames.com/nl/game/krunker-io" target="_blank">
-      <img src="https://images.crazygames.com/krunker-io/20210524082920/thumbnail.webp" alt="Krunker.io">
-      <div class="game-title">Krunker.io</div>
-    </a>
+<button onclick="showGame('snake')">Snake</button>
+<button onclick="showGame('game2048')">2048</button>
 
-    <a class="game" href="https://www.crazygames.com/nl/game/moto-x3m" target="_blank">
-      <img src="https://images.crazygames.com/moto-x3m/20200414071331/thumbnail.webp" alt="Moto X3M">
-      <div class="game-title">Moto X3M</div>
-    </a>
+<!-- SNAKE -->
+<div id="snake" class="game">
+  <h2>Snake</h2>
+  <canvas id="snakeCanvas" width="400" height="400"></canvas>
+</div>
 
-    <a class="game" href="https://www.crazygames.com/nl/game/1v1lol" target="_blank">
-      <img src="https://images.crazygames.com/1v1lol/20210319003954/thumbnail.webp" alt="1v1.lol">
-      <div class="game-title">1v1.lol</div>
-    </a>
+<!-- 2048 -->
+<div id="game2048" class="game">
+  <h2>2048</h2>
+  <div id="grid" style="width:260px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:5px;"></div>
+</div>
 
-    <a class="game" href="https://www.crazygames.com/nl/game/stickman-hook" target="_blank">
-      <img src="https://images.crazygames.com/stickman-hook/20211116174518/thumbnail.webp" alt="Stickman Hook">
-      <div class="game-title">Stickman Hook</div>
-    </a>
+<script>
+function showGame(id) {
+  document.querySelectorAll('.game').forEach(g => g.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+}
 
-  </div>
+/* ---------- SNAKE ---------- */
+const canvas = document.getElementById("snakeCanvas");
+const ctx = canvas.getContext("2d");
+let snake = [{x:200,y:200}];
+let food = {x:100,y:100};
+let dx = 20, dy = 0;
 
-  <p style="margin-top: 40px; font-size: 14px;">Click a game thumbnail to play!</p>
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowUp") {dx=0;dy=-20;}
+  if (e.key === "ArrowDown") {dx=0;dy=20;}
+  if (e.key === "ArrowLeft") {dx=-20;dy=0;}
+  if (e.key === "ArrowRight") {dx=20;dy=0;}
+});
+
+function drawSnake() {
+  ctx.clearRect(0,0,400,400);
+  ctx.fillStyle="lime";
+  snake.forEach(p => ctx.fillRect(p.x,p.y,20,20));
+  ctx.fillStyle="red";
+  ctx.fillRect(food.x,food.y,20,20);
+}
+
+function moveSnake() {
+  const head = {x:snake[0].x+dx,y:snake[0].y+dy};
+  snake.unshift(head);
+  if (head.x===food.x && head.y===food.y) {
+    food.x=Math.floor(Math.random()*20)*20;
+    food.y=Math.floor(Math.random()*20)*20;
+  } else snake.pop();
+}
+
+setInterval(()=>{moveSnake();drawSnake();},150);
+
+/* ---------- 2048 ---------- */
+let grid = Array(16).fill(0);
+grid[0]=2; grid[1]=2;
+const gridDiv = document.getElementById("grid");
+
+function draw2048() {
+  gridDiv.innerHTML="";
+  grid.forEach(v=>{
+    const d=document.createElement("div");
+    d.style.height="60px";
+    d.style.background=v? "#f2b179":"#333";
+    d.style.display="flex";
+    d.style.alignItems="center";
+    d.style.justifyContent="center";
+    d.style.fontSize="20px";
+    d.innerText=v||"";
+    gridDiv.appendChild(d);
+  });
+}
+draw2048();
+</script>
+
 </body>
 </html>
